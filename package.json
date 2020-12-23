@@ -1,0 +1,11 @@
+{
+  "name": "duan-vue-cli",
+  "version": "1.0.1",
+  "main": "index.js",
+  "repository": "git@github.com:ddzy/vue2-webpack5-cli.git",
+  "author": "ddzy <1766083035@qq.com>",
+  "license": "MIT",
+  "bin": {
+    "duan-vue-cli": "./bin/duan-vue-cli.js"
+  }
+}
