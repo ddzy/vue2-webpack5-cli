@@ -34,11 +34,11 @@ cmd
 				// 拉取 git 项目
 				// github:owner/name
 				// https://github.com/ddzy/vue2-webpack5-template.git
-				const spining = ora('正在下载模板');
+				const spining = ora('正在下载模板...');
 				spining.start();
 
 				download(
-					'github:ddzy/vue2-webpack5-template',
+					'github:ddzy/vue2-webpack5-template#main',
 					folderName,
 					{
 						clone: true,
@@ -52,11 +52,22 @@ cmd
 								name: folderName,
 								description,
 								author,
+								repository: '',
+								keywords: [],
 							};
 							const packagePath = `${folderName}/package.json`;
 							if (fs.existsSync(packagePath)) {
-								const packageContent = fs.readFileSync(packagePath);
-								const result = handlebars.compile(packageContent)(metaInfo);
+								const packageContent = JSON.parse(fs.readFileSync(packagePath));
+
+								packageContent.name = metaInfo.name;
+								packageContent.description = metaInfo.description;
+								packageContent.author = metaInfo.author;
+								packageContent.repository = metaInfo.repository;
+								packageContent.keywords = metaInfo.keywords;
+
+								const result = handlebars.compile(
+									JSON.stringify(packageContent, null, 2),
+								)(metaInfo);
 
 								fs.writeFileSync(packagePath, result);
 							}
@@ -65,7 +76,7 @@ cmd
 						} else {
 							spining.fail();
 
-							console.log(icon.err, chalk.red('项目拉取失败'));
+							console.log(icon.error, chalk.red(err));
 						}
 					},
 				);
